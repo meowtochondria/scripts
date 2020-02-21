@@ -35,7 +35,7 @@ function usage()
     echo "password via sudo if something needs it.";
     echo "";
     echo "Usage: ${0} [-v version_to_install]";
-    echo -e "\n-v\tVersion of $product to build. This version should be";
+    echo -e "\n-v\tVersion of $product to install. This version should be";
     echo -e "  \tavailable upstream. Default: latest ($pkg_version)";
     echo -e "\n-i\tInstallation path. Default is $install_dir.";
     echo -e "\n-l\tList available versions.";
@@ -178,7 +178,6 @@ function is_update_needed()
 
 function download_and_install_package()
 {
-    # prometheus is not publishing checksums for every release :/
     core_archive_name=$(basename "${available_versions[$pkg_version]}")
     failed_download='false'
 
