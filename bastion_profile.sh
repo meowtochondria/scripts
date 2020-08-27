@@ -101,6 +101,11 @@ function update-chef-repo()
     popd &> /dev/null
 }
 
+function ec2_get_instance_by_tag_name()   { aws ec2 describe-instances --filter "Name=tag:Name,Values=${1}"; }
+function ec2_get_instanceid_by_tag_name() { aws ec2 describe-instances --output text --filter "Name=tag:Name,Values=${1}" --query "Reservations[*].Instances[*].InstanceId"; }
+function ec2_start_instance_by_tag_name() { aws ec2 start-instances --instance-ids $(ec2_get_instanceid_by_tag_name  "${1}"); }
+function ec2_stop_instance_by_tag_name()  { aws ec2 stop-instances  --instance-ids $(ec2_get_instanceid_by_tag_name  "${1}"); }
+
 # Do git maintenance only when there are no other sessions active.
 num_ssh_sessions=$(who | wc -l)
 if [[ "$num_ssh_sessions" -eq 1 ]]; then
