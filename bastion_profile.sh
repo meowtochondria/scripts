@@ -118,6 +118,7 @@ elif [[ -d "$CHEF_DIR" ]]; then
     popd &> /dev/null
 fi
 
+test -x /usr/local/bin/aws_completer && complete -C '/usr/local/bin/aws_completer' aws
 
 export OKTA_USERNAME="${USER}@${COMPANY}-corp.com"
 export OKTA_PASSWORD='PUT_PASSWORD_HERE'
