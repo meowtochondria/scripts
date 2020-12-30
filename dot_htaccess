@@ -1,0 +1,34 @@
+DirectoryIndex index.html index.php index.htm parking-page.html
+
+# Do not show directory listing.
+Options -Indexes 
+
+# Redirect all traffic to https
+RewriteEngine On
+
+# Reroute everything that is coming to http://subdomain.devghai.com
+# to https://subdomain.devghai.com
+RewriteCond %{HTTPS} off
+# Don't put www. here. If it is already there it will be included, if not
+# the subsequent rule will catch it.
+RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [NE,R=301]
+
+# Allow request for any .zip to pass through.
+# Helpful to share files from website.
+RewriteCond %{REQUEST_URI} .*.zip
+RewriteRule .* - [END]
+
+# Allow request for any .pdf to pass through.
+# Helpful to share files from website.
+RewriteCond %{REQUEST_URI} .*.pdf
+RewriteRule .* - [END]
+
+# Allow request for blocklist to pass through.
+RewriteCond %{REQUEST_URI} .*pfsense_blocklist
+RewriteRule .* - [END]
+
+# Redirect all traffic to devghai.com to slack.com
+# https://httpd.apache.org/docs/current/mod/mod_rewrite.html#RewriteRule
+RewriteCond %{SERVER_NAME} (www\.)?devghai.com
+RewriteRule .* https://slack.com [R=301,END]
+
