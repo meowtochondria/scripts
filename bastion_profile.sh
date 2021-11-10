@@ -122,3 +122,5 @@ test -x /usr/local/bin/aws_completer && complete -C '/usr/local/bin/aws_complete
 
 export OKTA_USERNAME="${USER}@${COMPANY}-corp.com"
 export OKTA_PASSWORD='PUT_PASSWORD_HERE'
+
+test $(pgrep tmux) && echo -e "A ${BLUE}tmux/byobu session is running${NO_COLOR}."
