@@ -25,7 +25,9 @@ end
 config.color_scheme = 'Colorful Colors (terminal.sexy)'
 
 -- Font Configuration
--- config.font = wezterm.font('Roboto Mono', {weight = 'Medium'})
+-- config.font = wezterm.font('Iosevka Fixed Extended', {weight = 'Regular'})
+-- config.font = wezterm.font('Inconsolata Medium', {weight = 'Regular'})
+config.font = wezterm.font('Cousine', {weight = 'Regular'})
 -- config.freetype_load_target = "Light"
 config.font_size = 12.0
 
@@ -41,6 +43,10 @@ config.keys = {
 
 -- Disable audible beep
 config.audible_bell = "Disabled"
+
+-- updates
+config.check_for_updates = true
+config.check_for_updates_interval_seconds = 86400
 
 -- and finally, return the configuration to wezterm
 return config
