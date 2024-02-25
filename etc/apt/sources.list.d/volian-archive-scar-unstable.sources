@@ -1,0 +1,5 @@
+Types: deb deb-src
+URIs: https://deb.volian.org/volian/
+Suites: scar
+Components: main
+Signed-By: /usr/share/keyrings/volian-archive-scar-unstable.gpg

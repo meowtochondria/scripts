@@ -1,0 +1,6 @@
+Package: firefox
+# Use 
+# apt-cache policy | grep -oP 'o=[a-zA-Z\-]+' | sort | uniq
+# to show what all variables can go in place o=...
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 950

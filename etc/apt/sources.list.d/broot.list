@@ -1,0 +1,1 @@
+deb [signed-by=/usr/share/keyrings/broot-archive-keyring.gpg] http://packages.azlux.fr/debian/ stable main
