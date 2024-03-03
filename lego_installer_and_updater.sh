@@ -144,13 +144,13 @@ function print_available_versions()
     echo "Versions available upstream..."
     [ ${#available_versions[@]} -eq 0 ] && get_available_versions
     # Reference: http://www.tldp.org/LDP/abs/html/arrays.html
-    echo "${!available_versions[@]}" | tr -s ' ' '\n' | sort -hr
+    echo "${!available_versions[@]}" | tr -s ' ' '\n' | sort --version-sort --reverse
 }
 
 function get_latest_version()
 {
     [ ${#available_versions[@]} -eq 0 ] && get_available_versions
-    echo "${!available_versions[@]}" | tr ' ' '\n' | sort -h | tail -n 1
+    echo "${!available_versions[@]}" | tr ' ' '\n' | sort --version-sort | tail -n 1
 }
 
 function is_update_needed()
