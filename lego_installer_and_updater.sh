@@ -15,6 +15,7 @@ pkg_version='latest'
 isDebug=false
 release_link="https://api.github.com/repos/$project/$product/releases"
 install_dir="$HOME/bin"
+tmp='/tmp/lego'
 execute_features=()
 declare -A available_versions
 
@@ -161,7 +162,7 @@ function is_update_needed()
         print_debug_line "${FUNCNAME[0]} : $product is installed."
     else
         print_debug_line "${FUNCNAME[0]} : $product is NOT installed."
-        return 1
+#         return 1
     fi
 
     latest_available_version=$(get_latest_version)
@@ -182,15 +183,15 @@ function download_and_install_package()
     failed_download='false'
 
     # Skip download if file already exists
-    if [ -f "$install_dir/$core_archive_name" ]; then
-        print_debug_line "$install_dir/$core_archive_name already exists. Not downloading again..."
+    if [ -f "$tmp/$core_archive_name" ] && [ ! -s "$tmp/$core_archive_name" ]; then
+        print_debug_line "$tmp/$core_archive_name already exists. Not downloading again..."
     else
-        print_debug_line "${FUNCNAME[0]} : Downloading ${available_versions[$pkg_version]} to $install_dir/$core_archive_name"
-        mkdir -p "$install_dir"
-        wget -O "$install_dir/$core_archive_name" "${available_versions[$pkg_version]}"
+        print_debug_line "${FUNCNAME[0]} : Downloading ${available_versions[$pkg_version]} to $tmp/$core_archive_name"
+        mkdir -p "$tmp"
+        wget -O "$tmp/$core_archive_name" "${available_versions[$pkg_version]}"
 
         # Print a message if download leads to file of size 0
-        if [ ! -s "$install_dir/$core_archive_name" ]; then
+        if [ ! -s "$tmp/$core_archive_name" ]; then
             echo
             echo "Failed to download ${available_versions[$pkg_version]}."
             echo "Please verify if the link is accurate and network connectivity"
@@ -206,15 +207,15 @@ function download_and_install_package()
     fi
 
     echo -e "\nNow extracting $core_archive_name..."
-    /bin/tar --directory="$install_dir" --gzip --extract --verbose --file="$install_dir/$core_archive_name"
+    tar --directory="$install_dir" --gzip --extract --verbose --file="$tmp/$core_archive_name"
     if [ "$?" -ne 0 ]; then
         echo -e "\nFailed to extract downloaded archive - $install_dir/$core_archive_name"
-        echo -e "\nFailed command: /bin/tar --directory=\"$install_dir\" --gzip --extract --verbose --file=\"$install_dir/$core_archive_name\""
+        echo -e "\nFailed command: tar --directory=\"$install_dir\" --gzip --extract --verbose --file=\"$tmp/$core_archive_name\""
         exit 5
     fi
 
     # Remove archive once its all done.
-    /bin/rm -f "$install_dir/$core_archive_name"
+    rm -f "$tmp"
 
     echo -e "\n\nInstallation was successful!\nInvoking lego --version to verify expected version was installed.\n"
     "$install_dir/lego" --version
