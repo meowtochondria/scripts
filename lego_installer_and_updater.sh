@@ -158,15 +158,15 @@ function is_update_needed()
 {
     # This function checks if $product is installed, or if installed version is < latest version upstream.
     # Returns 0 if update is needed, 1 if not.
+    installed_version='not installed'
     if command -v $product &>/dev/null ; then
         print_debug_line "${FUNCNAME[0]} : $product is installed."
+        installed_version=$($product --version | grep -oP '(\d+\.){2}\d+')
     else
         print_debug_line "${FUNCNAME[0]} : $product is NOT installed."
-#         return 1
     fi
 
     latest_available_version=$(get_latest_version)
-    installed_version=$($product --version | grep -oP '(\d+\.){2}\d+')
 
     print_debug_line "${FUNCNAME[0]} : latest_available_version = $latest_available_version, installed_version = $installed_version."
     if [ "$latest_available_version" = "$installed_version" ]; then
