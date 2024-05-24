@@ -1,0 +1,1 @@
+NGINX fronts web configurator and its config is built in `/etc/inc/system.inc`. Its a PHP file. Look for function called `system_generate_nginx_config`. It can be used to modify which interfaces web configurator listens on. NGINX config is at `/var/etc/nginx-webConfigurator.conf`. Restart NGINX using `/etc/rc.restart_webgui`.
