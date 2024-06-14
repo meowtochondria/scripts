@@ -50,4 +50,32 @@ sudo curl -L -o /etc/apt/keyrings/syncthing-archive-keyring.gpg https://syncthin
 # Add the "stable" channel to your APT sources:
 echo "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
 
+#############
+# VS Codium #
+#############
+wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
+sudo apt-add-repository 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main'
+
+#################
+# broot, rclone #
+#################
+sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg  https://azlux.fr/repo.gpg
+echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ stable main" | sudo tee /etc/apt/sources.list.d/azlux-broot-rclone.list
+
+###########
+# wezterm #
+###########
+curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --yes --dearmor -o /usr/share/keyrings/wezterm-fury.gpg
+echo 'deb [signed-by=/usr/share/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | sudo tee /etc/apt/sources.list.d/wezterm.list
+
+###############
+# libreoffice #
+###############
+sudo add-apt-repository ppa:libreoffice/ppa
+
+############
+# kdenlive #
+############
+sudo add-apt-repository ppa:kdenlive/kdenlive-stable
+
 sudo apt-get update
