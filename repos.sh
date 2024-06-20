@@ -11,14 +11,8 @@ sudo apt-get install ca-certificates curl apt-transport-https
 ##########
 # winehq #
 ##########
-# sudo mkdir -pm755 /etc/apt/keyrings
-# sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
-# sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/$release_name/winehq-$release_name.sources
-#
-# # installs
-# # only 64 bit wine
-# sudo apt install --install-recommends libwine
-# sudo apt install --no-install-recommends wine64 wine
+sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/${release_name}/winehq-${release_name}.sources
 
 ##########
 # docker #
@@ -32,6 +26,11 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+#####################
+# kubuntu backports #
+#####################
+sudo add-apt-repository ppa:kubuntu-ppa/backports
 
 ###########
 # firefox #
@@ -77,5 +76,15 @@ sudo add-apt-repository ppa:libreoffice/ppa
 # kdenlive #
 ############
 sudo add-apt-repository ppa:kdenlive/kdenlive-stable
+
+#########################
+# Open Broadcast Studio #
+#########################
+sudo add-apt-repository ppa:obsproject/obs-studio
+
+##########
+# Solaar #
+##########
+sudo add-apt-repository ppa:solaar-unifying/stable
 
 sudo apt-get update

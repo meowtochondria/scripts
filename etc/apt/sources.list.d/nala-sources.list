@@ -1,6 +1,0 @@
-# Sources file built for nala
-
-deb http://mirror.us-sc.kamatera.com/ubuntu/ jammy main restricted universe multiverse
-
-deb https://mirrors.sonic.net/ubuntu/ jammy main restricted universe multiverse
-
