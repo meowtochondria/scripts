@@ -87,4 +87,10 @@ sudo add-apt-repository ppa:obsproject/obs-studio
 ##########
 sudo add-apt-repository ppa:solaar-unifying/stable
 
+########
+# nala #
+########
+sudo wget -O /usr/share/keyrings/volian-archive-scar-unstable.gpg https://gitlab.com/volian/volian-archive/-/blob/main/volian-archive-scar-unstable.gpg
+echo -e 'Types: deb deb-src\nURIs: https://deb.volian.org/volian/\nSuites: nala\nComponents: main\nSigned-By: /usr/share/keyrings/volian-archive-scar-unstable.gpg\n' | sudo tee -a /etc/apt/sources.list.d/volian-archive-nala-unstable.sources
+
 sudo apt-get update
