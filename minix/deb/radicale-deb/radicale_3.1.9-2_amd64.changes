@@ -1,0 +1,30 @@
+Format: 1.8
+Date: Tue, 19 Mar 2024 23:31:04 +0100
+Source: radicale
+Binary: python3-radicale radicale
+Built-For-Profiles: noudeb
+Architecture: all
+Version: 3.1.9-2
+Distribution: unstable
+Urgency: medium
+Maintainer: Jonas Smedegaard <dr@jones.dk>
+Changed-By: Jonas Smedegaard <dr@jones.dk>
+Description:
+ python3-radicale - simple calendar and addressbook server - python3 module
+ radicale   - simple calendar and addressbook server - daemon
+Changes:
+ radicale (3.1.9-2) unstable; urgency=medium
+ .
+   * autopkgtest-depend on python3-bcrypt
+Checksums-Sha1:
+ c845cd4afcbb09e789c033b3d240b2d781affb02 93076 python3-radicale_3.1.9-2_all.deb
+ 2a8db110ac2fd88145192cdd05d6a1624e6642b2 71530 radicale_3.1.9-2_all.deb
+ a2bd604aabf61f807b666918527b2b2eb58de9d5 8363 radicale_3.1.9-2_amd64.buildinfo
+Checksums-Sha256:
+ 19a91541ee8a3034678e3c9fcbd87497812a0cb5f554e0566509fdfd2303f00c 93076 python3-radicale_3.1.9-2_all.deb
+ 29d796127a663bd91c93a449ba1c7c565572b58c11179174fc7f7841a514aac1 71530 radicale_3.1.9-2_all.deb
+ 627ed5566eb652785e79270b9aa71bf0ebe6f11a0d339725e9b63b66f8c89ddb 8363 radicale_3.1.9-2_amd64.buildinfo
+Files:
+ efecc3ef69e5ec7f50844c337885ce49 93076 python optional python3-radicale_3.1.9-2_all.deb
+ 26e0ac6d43997a18836f2d3dec944892 71530 net optional radicale_3.1.9-2_all.deb
+ 899ae7df4161b9ff91af660df851b2a6 8363 net optional radicale_3.1.9-2_amd64.buildinfo
