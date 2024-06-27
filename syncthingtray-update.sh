@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 project='Martchus'
 product='syncthingtray'
@@ -10,7 +10,8 @@ pkg_version='latest'
 execute_features=()
 # set by download_package()
 download_path=''
-# TODO: check if package needs updating before downloading it.
+# Set by update_or_install()
+updating=0
 
 declare -A available_versions
 
@@ -241,46 +242,51 @@ function download_package()
         rm -rf "$tmp_dir"
         exit 8
     fi
+}
 
-
+function update_or_install()
+{
+    if [ ! -x "$install_dir/$product-$pkg_version-$product_suffix" ]; then
+        print_debug_line "${FUNCNAME[0]} : $product is NOT installed."
+        updating=0
+        return
+    fi
+    print_debug_line "${FUNCNAME[0]} : $product is already installed."
+    echo -e "\nChecking if we have the latest version installed... "
+    installed_version=$($install_dir/$product --help | grep -oP 'version \d+\.\d+\.\d+' | cut -f 2 -d ' ')
+    if [[ "$pkg_version" == "$installed_version" ]]; then
+        echo "Yes ($installed_version)!"
+        updating=-1
+        exit 0
+    fi
+    updating=1
 }
 
 function install_package()
 {
     # Assumes install path is in $PATH already.
-    updating=0
-    if [ -x "$install_dir/$product-$pkg_version-$product_suffix" ]; then
-        print_debug_line "${FUNCNAME[0]} : $product is already installed."
-        echo -e "\nChecking if we have the latest version installed... "
-        installed_version=$($install_dir/$product --help | grep -oP 'version \d+\.\d+\.\d+' | cut -f 2 -d ' ')
-        if [[ "$pkg_version" == "$installed_version" ]]; then
-            echo "Yes ($installed_version)!"
-            exit 0
-        fi
-        updating=1
-    fi
-
     print_debug_line "${FUNCNAME[0]} : Installing $product ($pkg_version)."
     core_archive_name=$(basename "${available_versions[$pkg_version]}")
     tar --directory "$install_dir" --extract --file "$download_path"
     if [ "$?" -ne 0 ]; then
         echo -e "\nFailed extraction. Removing $download_path. Exiting. :(\n"
-        rm -rf "$download_path"
+        cleanup
         exit 9
     fi
     
     # unlink before updating
-    print_debug_line "${FUNCNAME[0]} : updating = $updating"
     test "$updating" -eq 1 && unlink "$install_dir/$product"
 
     ln -sT "$install_dir/$product-$pkg_version-$product_suffix" "$install_dir/$product"
 
     if [ "$updating" -eq 1 ]; then
         # Remove all versions except the one we linked to
-        echo -e "Removing previous version..."
-        ls -1 ${install_dir}/${product}-* | grep -v "$pkg_version" | xargs unlink
-        echo -e "\nRelaunching $install_dir/$product... "
-        $install_dir/$product --replace
+        echo -e "\nRemoving previous version..."
+        for f in $(ls -1 ${install_dir}/${product}-* | grep -v "$pkg_version"); do
+            print_debug_line "${FUNCNAME[0]} : Removing $f"
+            unlink $f
+        done
+        echo -e "\nRelaunch using: $install_dir/$product --replace"
     fi
     
     echo "Done."
@@ -302,6 +308,7 @@ function main()
     [ ${#execute_features[@]} -gt 0 ] && exit 0
     perform_safety_checks
     validate_inputs
+    update_or_install
     download_package
     install_package
     cleanup
