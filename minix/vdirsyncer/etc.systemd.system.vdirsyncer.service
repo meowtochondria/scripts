@@ -1,0 +1,26 @@
+[Unit]
+Description=Synchronize calendars and contacts
+Documentation=https://vdirsyncer.readthedocs.org/
+After=network.target
+Requires=network.target
+
+[Service]
+ExecStart=/opt/pipx/bin/vdirsyncer --config /etc/vdirsyncer/config sync
+Restart=on-failure
+LogsDirectory=vdirsyncer
+User=vdirsyncer
+# Deny other users access to the calendar data
+UMask=0027
+# Optional security settings
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+NoNewPrivileges=true
+ReadWritePaths=/opt/vdirsyncer
+
+[Install]
+WantedBy=multi-user.target
