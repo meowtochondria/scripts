@@ -119,7 +119,7 @@ function perform_safety_checks()
     if [ -n "$unavailable_packages" ]; then
         echo -e "\nFollowing packages need to be installed:\n$unavailable_packages"
         echo    "Please enter the password for sudo (if prompted)"
-        sudo yum install -y $unavailable_packages
+        sudo apt install -y $unavailable_packages
 
         # Check if installation was successful.
         if [ "$?" -ne 0 ]; then
@@ -150,7 +150,7 @@ function perform_safety_checks()
     fi
 
     # Ensure install path exists in $PATH
-    if ! (echo $PATH | grep "$install_dir1" > /dev/null); then
+    if [[ "$PATH" != *"$install_dir"* ]]; then
         echo -e "\n$install_dir does not exist \$PATH! Please update your shell's rc file (eg .bashrc) to include it."
     fi
 
@@ -267,14 +267,21 @@ function install_package()
         rm -rf "$download_path"
         exit 9
     fi
+    
+    # unlink before updating
+    test "$updating" -eq 1 && unlink "$install_dir/$product"
 
     ln -sT "$install_dir/$product-$pkg_version-$product_suffix" "$install_dir/$product"
 
     if [ "$updating" -eq 1 ]; then
+        # Remove all versions except the one we linked to
+        echo -e "Removing previous version..."
+        ls -1 ${install_dir}/${product}-* | grep -v "$pkg_version" | xargs unlink
         echo -e "\nRelaunching $install_dir/$product... "
         $install_dir/$product --replace
-        echo "Done."
     fi
+    
+    echo "Done."
 }
 
 function main()

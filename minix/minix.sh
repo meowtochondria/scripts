@@ -31,3 +31,31 @@ for d in $(lsblk --output path,label --list --noheadings $usb_device | tail -n +
 # 3. cloudflared service install
 
 # caddy is not needed if using cloudflare tunnels. no https management is needed either.
+
+##### PIPX to install python packages in dedicated venv #####
+sudo apt install pipx
+sudo mkdir -p /opt/pipx/bin
+sudo chmod -R a+rwx /opt/pipx
+echo -e 'export PIPX_HOME="/opt/pipx"\nexport PIPX_BIN_DIR="$PIPX_HOME/bin"\n[[ "$PATH" == *"$PIPX_BIN_DIR"* ]] || export PATH="$PIPX_BIN_DIR:$PATH"' | sudo tee -a /etc/profile.d/pipx.sh
+
+##### VDIRSYNCER using PIPX #####
+pipx install vdirsyncer
+pipx inject vdirsyncer aiohttp-oauthlib
+sudo adduser --system --no-create-home --disabled-login --group vdirsyncer
+sudo install --directory --group=vdirsyncer --owner=vdirsyncer /etc/vdirsyncer
+sudo install --directory --group=vdirsyncer --owner=vdirsyncer /var/log/vdirsyncer
+sudo install --directory --group=vdirsyncer --owner=vdirsyncer /var/lib/vdirsyncer
+
+# SCP config file to /etc/vdirsyncer/config
+scp ./vdirsyncer/config minix:~/vdirsyncer.config
+scp ./vdirsyncer/gcal_token minix:~/gcal_token
+sudo mv ~/vdirsyncer.config /etc/vdirsyncer/config
+sudo mv ~/gcal_token /etc/vdirsyncer/gcal_token
+sudo chown vdirsyncer:vdirsyncer /etc/vdirsyncer/*
+
+# SCP systemd files
+scp ./vdirsyncer/etc.systemd.system.vdirsyncer.service minix:~/vdirsyncer.service
+scp ./vdirsyncer/etc.systemd.system.vdirsyncer.timer minix:~/vdirsyncer.timer
+sudo mv ~/vdirsyncer.service /etc/systemd/system/
+sudo mv ~/vdirsyncer.timer /etc/systemd/system/
+
