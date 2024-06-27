@@ -10,6 +10,7 @@ pkg_version='latest'
 execute_features=()
 # set by download_package()
 download_path=''
+# TODO: check if package needs updating before downloading it.
 
 declare -A available_versions
 
@@ -223,7 +224,7 @@ function download_package()
     fi
 
     print_debug_line "${FUNCNAME[0]} : Downloading ${available_versions[$pkg_version]} to $download_path"
-    wget --output-document="$download_path" "${available_versions[$pkg_version]}"
+    wget --no-verbose --output-document="$download_path" "${available_versions[$pkg_version]}"
 
     # Print a message if download leads to file of size 0, or wget exits with
     # non-zero exit code
@@ -252,7 +253,7 @@ function install_package()
         print_debug_line "${FUNCNAME[0]} : $product is already installed."
         echo -e "\nChecking if we have the latest version installed... "
         installed_version=$($install_dir/$product --help | grep -oP 'version \d+\.\d+\.\d+' | cut -f 2 -d ' ')
-        if [ "$pkg_version" -eq "$installed_version" ]; then
+        if [[ "$pkg_version" == "$installed_version" ]]; then
             echo "Yes ($installed_version)!"
             exit 0
         fi
@@ -269,6 +270,7 @@ function install_package()
     fi
     
     # unlink before updating
+    print_debug_line "${FUNCNAME[0]} : updating = $updating"
     test "$updating" -eq 1 && unlink "$install_dir/$product"
 
     ln -sT "$install_dir/$product-$pkg_version-$product_suffix" "$install_dir/$product"
@@ -284,6 +286,11 @@ function install_package()
     echo "Done."
 }
 
+function cleanup()
+{
+    rm -rf $tmp_dir
+}
+
 function main()
 {
     ##################
@@ -297,6 +304,7 @@ function main()
     validate_inputs
     download_package
     install_package
+    cleanup
 }
 
 main "$@"
