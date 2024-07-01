@@ -1,17 +1,15 @@
 [Unit]
-Description=Synchronize calendars and contacts
-Documentation=https://vdirsyncer.readthedocs.org/
+Description=A simple CalDAV (calendar) and CardDAV (contact) server
+Documentation=man:radicale(1)
 After=network.target
 Requires=network.target
-StartLimitBurst=2
 
 [Service]
-ExecStart=/opt/pipx/bin/vdirsyncer --config /etc/vdirsyncer/config sync local_cal/cal
+ExecStart=/opt/pipx/bin/radicale
 Restart=on-failure
-LogsDirectory=vdirsyncer
+LogsDirectory=radicale
 User=cal
 Group=cal
-RuntimeMaxSec=3m
 # Deny other users access to the calendar data
 UMask=0077
 # Optional security settings
@@ -23,7 +21,7 @@ ProtectKernelTunables=true
 ProtectKernelModules=true
 ProtectControlGroups=true
 NoNewPrivileges=true
-ReadWritePaths=/var/lib/calendar/vdirsyncer
+ReadWritePaths=/var/lib/calendar
 
 [Install]
 WantedBy=multi-user.target
