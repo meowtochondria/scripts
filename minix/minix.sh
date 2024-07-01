@@ -57,8 +57,8 @@ sudo mv ~/gcal_token /var/lib/vdirsyncer/gcal_token
 sudo chown cal:cal /etc/vdirsyncer/*
 
 # SCP systemd files
-scp ./vdirsyncer/etc.systemd.system.vdirsyncer.service minix:~/vdirsyncer.service
-scp ./vdirsyncer/etc.systemd.system.vdirsyncer.timer minix:~/vdirsyncer.timer
+# scp ./vdirsyncer/etc.systemd.system.vdirsyncer.service minix:~/vdirsyncer.service
+# scp ./vdirsyncer/etc.systemd.system.vdirsyncer.timer minix:~/vdirsyncer.timer
 sudo mv ~/vdirsyncer.service /etc/systemd/system/
 sudo mv ~/vdirsyncer.timer /etc/systemd/system/
 
@@ -91,15 +91,51 @@ sudo systemctl enable radicale.service
 sudo systemctl start radicale.service
 
 # SETUP BETWEEN VDIRSYNCER AND RADICALE:
+# As explained later, radicale needs to read vdirsyncer files. So they both run
+# under 'cal' user and nested under /var/lib/calendar as shown. We tightly
+# restrict where these processes can write using SystemD service definitions.
+#
+# root@minix:/var/lib/calendar# find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/"
+# .
+#   |-vdirsyncer
+#   |  |-status
+#   |  |  |-local_cal
+#   |  |-calendars
+#   |  |  |-okta
+#   |  |  |  |-.Radicale.cache
+#   |  |  |  |  |-item
+#   |  |  |  |  |-history
+#   |  |  |  |  |-sync-token
+#   |-radicale
+#   |  |-collections
+#   |  |  |-collection-root
+#   |  |  |  |-dev
+#   |  |  |  |  |-ghai-mattoo
+#   |  |  |  |  |  |-.Radicale.cache
+#   |  |  |  |  |  |  |-item
+#   |  |  |  |  |  |  |-history
+#   |  |  |  |  |  |  |-sync-token
+#   |  |  |  |  |-dev-contacts
+#   |  |  |  |  |  |-.Radicale.cache
+#   |  |  |  |  |  |  |-item
+#   |  |  |  |  |  |  |-history
+#   |  |  |  |  |  |  |-sync-token
+#   |  |  |  |-shal
+#
+#
+# There were errors when syncing directly from google using vdirsyncer
+# with radicale. To get around it, i needed to sync to a local dir first,
+# and then from it to radicale. This setup removes that extra step of
+# syncing from dir to radicale, thereby keeping it optimal for an Atom powered machine.
+# Caveat is that if a radicale sync is happening to modify an event, and vdirsyncer sync
+# is happening at the same time, then the behavior is undefined. I am not planning to
+# modify events in exposed calendar using radicale, so it is practical for my use-case.
+#
 # vdirsyncer syncs normally to its own directory.
 # radicale has a link pointing to calendar i want to expose into vdirsyncer directory.
 # However, radicale needs one file and one directory in calendar directory which we will
 # create using commands.
-# This setup is as optimal as it can get to do as few network requests as possible on an
-# Atom powered fanless machine.
-# Caveat is that if a radicale sync is happening to modify an event, and vdirsyncer sync
-# is happening at the same time, then the behavior is undefined. I am not planning to
-# modify events in exposed calendar using radicale.
+
 
 # MANUAL STEPS TO SETUP CALENDAR AND LINKING VDIRSYNCER TO RADICALE
 sudo -Hu cal /opt/pipx/bin/vdirsyncer --config /etc/vdirsyncer/config discover
