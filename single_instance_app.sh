@@ -1,5 +1,7 @@
 #!/bin/sh
 
+test -z "$WEZTERM_CONFIG_FILE" && export WEZTERM_CONFIG_FILE=/home/dev/src/scripts/wezterm.lua
+
 DESKTOP_FILE='/usr/share/applications/org.wezfurlong.wezterm.desktop'
 # get binary name by looking at 'Exec' value in .desktop file.
 BIN=$(grep -P '^Exec=' $DESKTOP_FILE | cut -f 2 -d '=' |cut -f 1 -d ' ')
