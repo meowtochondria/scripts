@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test -z "$WEZTERM_CONFIG_FILE" && export WEZTERM_CONFIG_FILE=/home/dev/src/scripts/wezterm.lua
+test -z "$WEZTERM_CONFIG_FILE" && (test -f /home/dev/src/scripts/wezterm.lua && export WEZTERM_CONFIG_FILE=/home/dev/src/scripts/wezterm.lua)
 
 DESKTOP_FILE='/usr/share/applications/org.wezfurlong.wezterm.desktop'
 # get binary name by looking at 'Exec' value in .desktop file.
