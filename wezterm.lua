@@ -13,6 +13,8 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
+config.scrollback_lines = 100000
+
 -- This is where you actually apply your config choices
 
 -- For example, changing the color scheme:
@@ -26,8 +28,9 @@ config.color_scheme = 'Colorful Colors (terminal.sexy)'
 
 -- Font Configuration
 -- config.font = wezterm.font('Iosevka Fixed Extended', {weight = 'Regular'})
--- config.font = wezterm.font('Inconsolata Medium', {weight = 'Regular'})
-config.font = wezterm.font('Cousine', {weight = 'Regular'})
+-- config.font = wezterm.font('Cousine', {weight = 'Regular'})
+-- config.font = wezterm.font('Source Code Pro', {weight = 'Regular'})
+config.font = wezterm.font('B612 Mono', {weight = 'Regular'})
 -- config.freetype_load_target = "Light"
 config.font_size = 12.0
 
