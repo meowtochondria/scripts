@@ -5,7 +5,6 @@ export NAMECHEAP_DEBUG=true
 KEEPASSXC_DB="$HOME/Keepassxc/keepass2.kdbx"
 KEEPASSXC_CLI=$(command -v keepassxc-cli)
 LEGO_CLI=$(command -v lego)
-EMAIL='dev@ghai.co'
 
 test -f "$KEEPASSXC_DB" || (echo "$KEEPASSXC_DB not found! Exiting." && exit 3)
 test -z "$KEEPASSXC_CLI" && echo "keepassxc-cli not found! Exiting." && exit 4
