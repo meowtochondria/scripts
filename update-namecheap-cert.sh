@@ -19,6 +19,7 @@ CPANEL_API_TOKEN=$($KEEPASSXC_CLI show --quiet --attributes password $KEEPASSXC_
 # See if we have the entry we want before proceeding. Acts as a check for password validity as well.
 test -z "$CPANEL_API_TOKEN" && echo "Couldn't fetch CPanel token. Wrong password or entry moved?" && exit 2
 
+# export is required for these 3 variables because lego expects these variables in env.
 export CLOUDFLARE_DNS_API_TOKEN=$($KEEPASSXC_CLI show --quiet --attributes password $KEEPASSXC_DB '/Home/Cloudflare DNS API token' <<< $KEEPASS)
 export NAMECHEAP_API_KEY=$($KEEPASSXC_CLI show --quiet --attributes password $KEEPASSXC_DB '/Home/Namecheap API' <<< $KEEPASS)
 export NAMECHEAP_API_USER=$($KEEPASSXC_CLI show --quiet --attributes username $KEEPASSXC_DB '/Home/Namecheap API' <<< $KEEPASS)
