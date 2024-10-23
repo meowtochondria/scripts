@@ -1,6 +1,6 @@
-# ubuntu-minimal-22.04
+# ubuntu-minimal-24.04
 
-sudo apt install man man-db manpages bash-completion vim python3 python3-pip mlocate dnsutils netcat apt-utils dialog net-tools apt-file
+sudo apt install man man-db manpages bash-completion vim python3 python3-pip locate dnsutils netcat-openbsd apt-utils dialog net-tools apt-file
 
 # fix man in ubuntu-minimal
 test -x /usr/bin/man.REAL && sudo mv /usr/bin/man{.REAL,}
