@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 # Updating certs using API - https://api.docs.cpanel.net/openapi/cpanel/operation/install_ssl/
 
 export NAMECHEAP_DEBUG=true
