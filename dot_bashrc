@@ -102,6 +102,7 @@ function __prompt_command() {
     test $exit_code -ne 0 && exit_symbol="💨"
 
     # Include git branch in prompt if git-prompt.sh is available.
+    # wget https://raw.githubusercontent.com/git/git/refs/heads/master/contrib/completion/git-prompt.sh -O "$HOME/.git-prompt.sh"
     if [ -f $HOME/.git-prompt.sh ]; then
         source $HOME/.git-prompt.sh
         export GIT_PS1_SHOWCOLORHINTS=1
