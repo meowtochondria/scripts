@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 test -z "$WEZTERM_CONFIG_FILE" && test -f /home/dev/src/scripts/wezterm.lua && export WEZTERM_CONFIG_FILE=/home/dev/src/scripts/wezterm.lua
 
@@ -17,11 +17,11 @@ test -z "$PID" && /usr/bin/gio launch "$DESKTOP_FILE" && exit 0
 # control would reach here only if an instance of app is running, which means PID would not be empty.
 
 # if we are on wayland, use kdotool instead.
-# wget -O https://github.com/jinliu/kdotool/releases/download/v0.2.2-pre/kdotool.tar.gz -O /tmp/kdotool.tar
+# wget https://github.com/jinliu/kdotool/releases/download/v0.2.2-pre/kdotool.tar.gz -O /tmp/kdotool.tar
 # tar --extract --directory=/tmp --file /tmp/kdotool.tar
 # sudo mv /tmp/kdotool /usr/local/bin/kdotool
 
-pgrep Xwayland && test -x /usr/local/bin/kdotool && /usr/local/bin/kdotool windowactivate $(/usr/local/bin/kdotool search wezterm) && exit 0
+pgrep Xwayland && test -x /usr/local/bin/kdotool && /usr/local/bin/kdotool windowactivate $(/usr/local/bin/kdotool search "$BIN") && exit 0
 
 # X11
 # grab hex identity of the window using pid and wmctrl
