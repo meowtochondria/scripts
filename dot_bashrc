@@ -177,6 +177,14 @@ test -d "$HOME/.local/bin" && PATH="$PATH:$HOME/.local/bin"
 
 # test -x $HOME/.local/bin/starship && eval "$($HOME/.local/bin/starship init bash)"
 
+# bat: when installing from repo
+if [ -x /usr/bin/batcat ]; then
+    alias bat='batcat'
+    export MANROFFOPT="-c"
+    export MANPAGER="sh -c 'col -bx | batcat --language  man --plain'"
+fi
+
+# bat: when downloading a bin and dunking it into ~/.local/bin
 if [ -x $HOME/.local/bin/bat ]; then
     export MANROFFOPT="-c"
     export MANPAGER="sh -c 'col -bx | bat --language  man --plain'"
