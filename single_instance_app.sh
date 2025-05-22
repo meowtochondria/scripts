@@ -21,7 +21,7 @@ test -z "$PID" && /usr/bin/gio launch "$DESKTOP_FILE" && exit 0
 # tar --extract --directory=/tmp --file /tmp/kdotool.tar
 # sudo mv /tmp/kdotool /usr/local/bin/kdotool
 
-pgrep Xwayland > /dev/null && test -x /usr/local/bin/kdotool && /usr/local/bin/kdotool windowactivate $(/usr/local/bin/kdotool search "$BIN") && exit 0
+test "$XDG_SESSION_TYPE" = "wayland" && test -x /usr/local/bin/kdotool && /usr/local/bin/kdotool windowactivate $(/usr/local/bin/kdotool search "$BIN") && exit 0
 
 # X11
 # grab hex identity of the window using pid and wmctrl
