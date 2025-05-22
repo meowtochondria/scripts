@@ -31,6 +31,7 @@ echo \
 # kubuntu backports #
 #####################
 sudo add-apt-repository ppa:kubuntu-ppa/backports
+sudo add-apt-repository ppa:kubuntu-ppa/ppa
 
 ###########
 # firefox #
