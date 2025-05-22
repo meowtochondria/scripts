@@ -77,7 +77,9 @@ Auth:
 ```
 
 Ensure that file mentioned above:
+
 * Has `Priority` number greater than that mentioned in `/usr/share/pam-configs/fprintd`.
+
     ```
     echo $(( $(grep --only-matching --perl-regexp --max-count=1 '\d+' /usr/share/pam-configs/fprintd ) + 1))
     ```
