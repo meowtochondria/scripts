@@ -87,4 +87,4 @@ Ensure that file mentioned above:
 
 Execute `sudo pam-auth-update` to update appropriate file under `/etc/pam.d`. Now the system is ready to use.
 
-In case you also want to have same behavior when laptop lid is open, but connected to HDMI, you can do so by extending the script to also check for that. Connection state will include `connected` under appropriate display path, like `/sys/class/drm/card0-HDMI-A-1/status`.
+In case you also want to have same behavior when laptop lid is open, but connected to HDMI, you can do so by extending the script to also check for that. Connection state will include `connected` under appropriate display path, like `/sys/devices/pci0000:00/0000:00:08.1/0000:33:00.0/drm/card1/card1-DP-9/status`.
