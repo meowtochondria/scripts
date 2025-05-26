@@ -38,13 +38,13 @@ esac
 And then add the following line, just before `pam_fprintd`:
 
 ```
-auth   [success=ignore default=1]   pam_exec.so quiet /usr/bin/grep --quiet --no-messages open /proc/acpi/button/lid/LID/state
+auth   [success=ignore default=1]   pam_exec.so quiet /usr/bin/grep --quiet --no-messages open /proc/acpi/button/lid/LID/state &>/dev/null
 ```
 
 So your config would look like this:
 
 ```
-auth   [success=ignore default=1]  pam_exec.so quiet /usr/bin/grep --quiet --no-messages open /proc/acpi/button/lid/LID/state
+auth   [success=ignore default=1]  pam_exec.so quiet /usr/bin/grep --quiet --no-messages open /proc/acpi/button/lid/LID/state &>/dev/null
 auth   sufficient                  pam_fprintd.so
 auth   required                    pam_unix.so
 ```
@@ -73,7 +73,7 @@ Priority: 261
 Conflicts: fprint
 Auth-Type: Primary
 Auth:
-        [success=ignore default=1]      pam_exec.so quiet /usr/bin/grep --quiet --no-messages open /proc/acpi/button/lid/LID/state
+        [success=ignore default=1]      pam_exec.so quiet /usr/bin/grep --quiet --no-messages open /proc/acpi/button/lid/LID/state &>/dev/null
 ```
 
 Ensure that file mentioned above:
