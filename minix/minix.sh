@@ -153,4 +153,52 @@ sudo install --directory --owner=cal --group=cal /var/lib/calendar/vdirsyncer/ca
 sudo install --directory --group=cal --owner=cal /var/lib/calendar/radicale/collections/collection-root/dev/
 sudo -Hu cal ln -sT /var/lib/calendar/vdirsyncer/calendars/okta /var/lib/calendar/radicale/collections/collection-root/dev/okta
 
+##### Drive sharing #####
+# /etc/fstab entries. Use noauto to mount when user access. Add nofail to ignore mount errors.
+# sudo blkid --probe /dev/sda{1..5} to get uuid and label.
+# /dev/sda1
+/dev/disk/by-uuid/aae50a20-7c41-4b07-bc04-405874075059 /media/Primary ext4 rw,async,user,auto 0 2
+# /dev/sda2
+/dev/disk/by-uuid/9dc964de-ad4a-4f18-86ee-556de4b6224e /media/docs ext4 rw,async,user,auto 0 2
+# /dev/sda3
+/dev/disk/by-uuid/8a9c5f0c-9993-482a-a0fd-c2d64ebad680 /media/pics ext4 rw,async,user,auto 0 2
+# /dev/sda4
+/dev/disk/by-uuid/8ee758a6-c7a3-4f6e-873a-9617322e2bed /media/media ext4 rw,async,user,auto 0 2
+# /dev/sda5
+/dev/disk/by-uuid/ad27dae7-6d8e-46fb-be1f-5bfb30a17f34 /media/archive ext4 rw,async,user,auto 0 2
+
+sudo apt install samba
+
+# /etc/samba/smb.conf
+# append following blocks
+[archive]
+    comment = archive
+    path = /media/archive
+    read only = no
+    browsable = yes
+    guest ok = yes
+[Primary]
+    comment = Primary
+    path = /media/Primary
+    read only = no
+    browsable = yes
+    guest ok = yes
+[docs]
+    comment = docs
+    path = /media/docs
+    read only = no
+    browsable = yes
+    guest ok = yes
+[pics]
+    comment = pics
+    path = /media/pics
+    read only = no
+    browsable = yes
+    guest ok = yes
+[media]
+    comment = media
+    path = /media/media
+    read only = no
+    browsable = yes
+    guest ok = yes
 
