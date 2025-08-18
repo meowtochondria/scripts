@@ -171,6 +171,11 @@ sudo apt install samba
 
 # /etc/samba/smb.conf
 # append following blocks
+
+# Some settings under global section to allow Sonos to read dirs.
+ntlm auth = yes
+server min protocol = NT1
+
 [archive]
     comment = archive
     path = /media/archive
