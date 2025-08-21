@@ -10,32 +10,9 @@ auth            required        pam_unix.so
 ```
 Your real config could be different or even in a different location, but what's crucial is `pam_fprintd` and `pam_unix`, which does password auth.
 
-What you could do is add another entry into config, just before `pam_fprintd.so` which would skip that module if LID is closed. One way to achieve this is via [pam_exec.so](https://man7.org/linux/man-pages/man8/pam_exec.8.html) module. Create an executable script `/usr/local/bin/pam_check_lid` with the following contents:
+What you could do is add another entry into config, just before `pam_fprintd.so` which would skip that module if LID is closed. One way to achieve this is via [pam_exec.so](https://man7.org/linux/man-pages/man8/pam_exec.8.html) module.
 
-```
-#!/bin/sh
-LID_STATE=$(cat /proc/acpi/button/lid/LID/state | cut -d':' -f2 | tr -d ' ')
-
-case ${LID_STATE} in
-    closed)
-    echo closed
-    exit 1
-    ;;
-    open*)
-    echo open
-    exit 0
-    ;;
-    *)
-    # LID is open by default
-    echo unknown
-    exit 0
-    ;;
-esac
-```
-
-*IMPORTANT*: ensure that this file isn't globally writable. Otherwise, you might introduce a security vulnerability into your system. Also, you can check LID status over dbus, for details check [this](https://unix.stackexchange.com/a/551220/147806).
-
-And then add the following line, just before `pam_fprintd`:
+Add the following line, just before `pam_fprintd`:
 
 ```
 auth   [success=ignore default=1]   pam_exec.so quiet /usr/bin/grep --quiet --no-messages open /proc/acpi/button/lid/LID/state &>/dev/null
@@ -53,7 +30,9 @@ Now PAM auth would execute your script before attempting fingerprint auth, and i
 
 Alternatively, instead of `pam_exec.so` with a script, you can make your own PAM module with the same behavior as a script.
 
-Few notes on debugging and actually implementing this. If you're having issues with `pam_exec`, you can add debugging options like `debug` and `log`, for details check `pam_exec` [documentation](https://man7.org/linux/man-pages/man8/pam_exec.8.html). It is also good to test your changes on a new PAM config, instead of modifying an existing one, since a mistake in a config might lock you from your account. For example, you can just copy your `system-auth` as `system-auth-new` and work on `system-auth-new` and then replace it when it's tested. And for testing you could use [pamtester](https://pamtester.sourceforge.net/). For example:
+Few notes on debugging and actually implementing this. If you're having issues with `pam_exec`, you can add debugging options like `debug` and `log`. For details check `pam_exec` [documentation](https://man7.org/linux/man-pages/man8/pam_exec.8.html).
+
+It is also good to test your changes on a new PAM config, instead of modifying an existing one, since a mistake in a config might lock you from your account. For example, you can just copy your `system-auth` as `system-auth-new` and work on `system-auth-new` and then replace it when it's tested. And for testing you could use [pamtester](https://pamtester.sourceforge.net/). For example:
 
 ```
 cp /etc/pam.d/system-auth /etc/pam.d/system-auth-new
@@ -78,7 +57,7 @@ Auth:
 
 Ensure that file mentioned above:
 
-* Has `Priority` number greater than that mentioned in `/usr/share/pam-configs/fprintd`.
+* Has `Priority` number greater than that mentioned in `/usr/share/pam-configs/fprintd`. You can use the following command to get the priority number.
 
     ```
     echo $(( $(grep --only-matching --perl-regexp --max-count=1 '\d+' /usr/share/pam-configs/fprintd ) + 1))
